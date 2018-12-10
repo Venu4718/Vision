@@ -5,21 +5,26 @@
         <div class="container">
         {% csrf_token %}
         <div id="paint" style="width: 400px;height: 400px;">
-                <canvas id="myCanvas" style="background-color: aliceblue;width: 100%;height: 100%;"></canvas>
+                <canvas id="myCanvas" style="background-color: black;width: 100%;height: 100%;"></canvas>
         </div><br>
         <div class="container" style="height: 50px;left: 0px">
             <div class="container" style="top:30px">
                 <button type="button" class="btn btn-danger" id="clear">Clear</button>
                 <button type="button" class="btn btn-success" id="find">Find!</button>
                 <h2>Answer:</h2>
+                <table>
+                <tr><input style="width: 30%" id="answer"></tr>
+                </table>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block scripts %}
     <script>
+    document.getElementById('answer').readOnly = true;
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
+    ctx.fillStyle = "black";
     var painting = document.getElementById('paint');
     var paint_style = getComputedStyle(painting);
     canvas.width = parseInt(paint_style.getPropertyValue('width'));
@@ -33,10 +38,10 @@
       mouse.x = e.pageX - this.offsetLeft;
       mouse.y = e.pageY - this.offsetTop;
     }, false);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 45;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#00000';
+    ctx.strokeStyle = '#ffffff';
     canvas.addEventListener('mousedown', function(e) {
         ctx.beginPath();
         ctx.moveTo(mouse.x, mouse.y);
@@ -52,9 +57,11 @@
     };
     function clear() {
         {#alert("detect!");#}
+        document.getElementById('answer').value = "";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     function find() {
+        document.getElementById('answer').value = "";
         console.log("clicked find!");
         var image_data = canvas.toDataURL();
         console.log(image_data)
@@ -65,9 +72,8 @@
                 image64:image_data
             },
             success:function (data) {
-                alert("done!");
                 console.log(data);
-
+                document.getElementById('answer').value = data.data;
             }
         })
     }

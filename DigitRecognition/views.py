@@ -5,8 +5,11 @@ from urllib.request import urlretrieve
 from PIL import Image
 import PIL
 from django.http import JsonResponse
-
+from .utils import create_model
+import matplotlib.pyplot as plt
 # Create your views here.
+
+
 def index(request):
     return render(request, 'Vision/base.html')
 
@@ -22,5 +25,8 @@ def detect(request):
     hpercent = (baseheight / float(img.size[1]))
     wsize = int((float(img.size[0]) * float(hpercent)))
     img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
-    img = np.array(img.getdata()).reshape(-1,28,28)
-    return JsonResponse({'data':'got it'})
+    img = np.array(img.getdata()).reshape(1,28,28)
+    model = create_model()
+    plt.imshow(img.reshape(28,28))
+    prediction = np.argmax(model.predict(img))
+    return JsonResponse({'data':str(prediction)})
