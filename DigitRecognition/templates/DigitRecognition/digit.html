@@ -55,18 +55,18 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     function find() {
-        alert("clicked find!");
-        {#alert(canvas.toDataURL());#}
+        console.log("clicked find!");
         var image_data = canvas.toDataURL();
-        console.log("Image Data",image_data);
+        console.log(image_data)
         $.ajax({
             type:"POST",
-            url: '/recognize',
+            url: '{% url 'detect' %}',
             data: {
-                imageBase64:image_data
+                image64:image_data
             },
-            success:function () {
+            success:function (data) {
                 alert("done!");
+                console.log(data);
 
             }
         })

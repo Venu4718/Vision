@@ -1,4 +1,10 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+import numpy as np
+from urllib.request import urlretrieve
+from PIL import Image
+import PIL
+from django.http import JsonResponse
 
 # Create your views here.
 def index(request):
@@ -6,3 +12,15 @@ def index(request):
 
 def digit(request):
     return render(request, 'DigitRecognition/digit.html')
+
+@csrf_exempt
+def detect(request):
+    respon = request.POST['image64']
+    filename, m = urlretrieve(respon)
+    baseheight = 28
+    img = Image.open(filename).convert('L')
+    hpercent = (baseheight / float(img.size[1]))
+    wsize = int((float(img.size[0]) * float(hpercent)))
+    img = img.resize((wsize, baseheight), PIL.Image.ANTIALIAS)
+    img = np.array(img.getdata()).reshape(-1,28,28)
+    return JsonResponse({'data':'got it'})
