@@ -1,0 +1,75 @@
+{% include 'Vision/base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Draw</h1>
+        <div class="container">
+        {% csrf_token %}
+        <div id="paint" style="width: 400px;height: 400px;">
+                <canvas id="myCanvas" style="background-color: aliceblue;width: 100%;height: 100%;"></canvas>
+        </div><br>
+        <div class="container" style="height: 50px;left: 0px">
+            <div class="container" style="top:30px">
+                <button type="button" class="btn btn-danger" id="clear">Clear</button>
+                <button type="button" class="btn btn-success" id="find">Find!</button>
+                <h2>Answer:</h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+    var painting = document.getElementById('paint');
+    var paint_style = getComputedStyle(painting);
+    canvas.width = parseInt(paint_style.getPropertyValue('width'));
+    canvas.height = parseInt(paint_style.getPropertyValue('height'));
+    var mouse = {x: 0, y: 0};
+    var element = document.getElementById("clear");
+    element.addEventListener("click", clear, false);
+    var elementfind = document.getElementById("find");
+    elementfind.addEventListener("click",find,false);
+    canvas.addEventListener('mousemove', function(e) {
+      mouse.x = e.pageX - this.offsetLeft;
+      mouse.y = e.pageY - this.offsetTop;
+    }, false);
+    ctx.lineWidth = 10;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#00000';
+    canvas.addEventListener('mousedown', function(e) {
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+
+        canvas.addEventListener('mousemove', onPaint, false);
+    }, false);
+    canvas.addEventListener('mouseup', function() {
+        canvas.removeEventListener('mousemove', onPaint, false);
+    }, false);
+    var onPaint = function() {
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+    };
+    function clear() {
+        {#alert("detect!");#}
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    function find() {
+        alert("clicked find!");
+        {#alert(canvas.toDataURL());#}
+        var image_data = canvas.toDataURL();
+        console.log("Image Data",image_data);
+        $.ajax({
+            type:"POST",
+            url: '/recognize',
+            data: {
+                imageBase64:image_data
+            },
+            success:function () {
+                alert("done!");
+
+            }
+        })
+    }
+    </script>
+{% endblock %}
