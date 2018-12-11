@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.urls import path,include
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     path(r'^admin/', admin.site.urls),
     path(r'',include('DigitRecognition.urls')),
-    path(r'ImageREcognition/',include('ImageRecognition.urls'),name='imagerecognition'),
+    path(r'ImageRecognition/',include('ImageRecognition.urls'),name='imagerecognition'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
