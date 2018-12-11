@@ -20,7 +20,6 @@ def index(request):
             model = load_model()
             prediction = tf.keras.applications.inception_v3.decode_predictions(model.predict(img))[0][0][1]
         except Exception as e:
-            prediction = "# Something went worng #\n"+str(e)
-        print(img.shape)
+            prediction = "# Something went worng #\n"+e
         return render(request,'ImageRecognition/index.html',{'uploaded_file_url': uploaded_file_url,'prediction':prediction})
     return render(request,'ImageRecognition/index.html')
