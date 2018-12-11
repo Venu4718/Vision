@@ -13,6 +13,7 @@
                 <div class="container" style="height: 500px;widows: 500px;">
                     <img src="{{ uploaded_file_url }}" alt="Smiley face" width="500" height="500">
                 </div>
+                <h2>Answer: {{ prediction }}</h2>
                 <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
             {% endif %}
             <p><a href="{% url 'imagerecognition' %}">Return to home</a></p>
