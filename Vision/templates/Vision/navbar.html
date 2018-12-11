@@ -1,13 +1,19 @@
- <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+ <nav class="navbar navbar-inverse" style="border-radius: 0px">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="{% url 'index' %}">Vision</a>
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-            <a class="nav-link" href="{% url 'digit' %}">DigitRecognition</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-        </ul>
-      </div>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'digit' %}">DigitRecognition</a></li>
+          <li><a href="{% url 'imagerecognition' %}">ImageRecognition</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
